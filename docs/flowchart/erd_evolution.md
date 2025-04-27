@@ -30,7 +30,7 @@ At this stage:
 - Only essential fields (id, name, email, etc.) were considered.
 - No deep typing (like enums or UUIDs) was enforced yet.
 
-**Diagram:** ![Stage 1 ERD](docs/ERD/stage1.png)
+**Diagram:** ![Stage 1 ERD](https://github.com/nayanmapara/Event-Ticket-Platform/blob/main/docs/ERD/stage1.png)
 
 ---
 
@@ -63,7 +63,7 @@ At this stage:
 
 **Goal:** Capture the full lifecycle of a ticket from sale ➔ QR generation ➔ validation.
 
-**Diagram:** ![Stage 3 ERD](docs/ERD/stage3.png)
+**Diagram:** ![Stage 3 ERD](https://github.com/nayanmapara/Event-Ticket-Platform/blob/main/docs/ERD/stage3.png)
 
 ---
 
@@ -81,7 +81,7 @@ At this stage:
   - Clear separation between User Roles.
   - Support for complex ticket workflows.
 
-**Diagram:** ![Stage 4 ERD](docs/ERD/stage4.png)
+**Diagram:** ![Stage 4 ERD](https://github.com/nayanmapara/Event-Ticket-Platform/blob/main/docs/ERD/stage4.png)
 
 ---
 
@@ -112,16 +112,6 @@ At this stage:
         ↓
 [ Stage 4: Finalized Relationships & Scalability Enhancements ]
 ```
-
-### Alternative Fancy Version (Emoji Style)
-
-🟢 Stage 1: Basic Entities  
-⬇️  
-🟡 Stage 2: Data Typing & Enums  
-⬇️  
-🟠 Stage 3: Lifecycle Mapping (Ticket Validation, QR Code)  
-⬇️  
-🔵 Stage 4: Finalized Relationships & Scalability Enhancements
 
 ---
 
