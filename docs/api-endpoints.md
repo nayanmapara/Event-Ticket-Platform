@@ -122,4 +122,4 @@ GET /api/v1/events/{event_id}/ticket-validations
 - **Get Ticket Info**
 ```http
 GET /api/v1/tickets/{ticket_id}
-```
+``` 
