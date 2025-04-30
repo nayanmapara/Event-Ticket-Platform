@@ -31,7 +31,7 @@ At this stage:
 - No deep typing (like enums or UUIDs) was enforced yet.
 
 **Diagram:** <br/>
-![Stage 1 ERD](https://github.com/nayanmapara/Event-Ticket-Platform/blob/main/docs/ERD/stage1.png)
+![Stage 1 ERD](https://github.com/nayanmapara/Event-Ticket-Platform/blob/main/docs/ERD/drawio/stage1.png)
 
 ---
 
@@ -49,7 +49,7 @@ At this stage:
 **Goal:** Stronger schema typing to avoid inconsistencies later.
 
 **Diagram:** <br/>
-![Stage 2 ERD](https://github.com/nayanmapara/Event-Ticket-Platform/blob/main/docs/ERD/stage2.png)
+![Stage 2 ERD](https://github.com/nayanmapara/Event-Ticket-Platform/blob/main/docs/ERD/drawio/stage2.png)
 
 ---
 
@@ -66,7 +66,7 @@ At this stage:
 **Goal:** Capture the full lifecycle of a ticket from sale ➔ QR generation ➔ validation.
 
 **Diagram:** <br/>
-![Stage 3 ERD](https://github.com/nayanmapara/Event-Ticket-Platform/blob/main/docs/ERD/stage3.png)
+![Stage 3 ERD](https://github.com/nayanmapara/Event-Ticket-Platform/blob/main/docs/ERD/drawio/stage3.png)
 
 ---
 
@@ -85,7 +85,7 @@ At this stage:
   - Support for complex ticket workflows.
 
 **Diagram:** <br/>
-![Stage 4 ERD](https://github.com/nayanmapara/Event-Ticket-Platform/blob/main/docs/ERD/stage4.png)
+![Stage 4 ERD](https://github.com/nayanmapara/Event-Ticket-Platform/blob/main/docs/ERD/drawio/stage4.png)
 
 ---
 
