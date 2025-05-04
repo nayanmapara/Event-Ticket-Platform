@@ -40,7 +40,7 @@ Roles:
 
 ## 📊 Architecture Diagram
 
-![Architecture Diagram](https://github.com/nayanmapara/Event-Ticket-Platform/blob/main/docs/architecture/architecture.png)
+![Architecture Diagram](https://github.com/nayanmapara/Event-Ticket-Platform/blob/main/docs/Architecture/drawio/architecture.png)
 
 ---
 
