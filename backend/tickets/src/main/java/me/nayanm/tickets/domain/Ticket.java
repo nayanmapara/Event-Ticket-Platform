@@ -30,7 +30,7 @@ public class Ticket {
     private TicketStatusEnum status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tickey_type_id")
+    @JoinColumn(name = "ticket_type_id")
     private TicketType ticketType;
 
     @ManyToOne(fetch = FetchType.LAZY)
