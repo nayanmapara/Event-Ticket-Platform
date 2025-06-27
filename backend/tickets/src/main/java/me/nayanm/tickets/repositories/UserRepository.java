@@ -1,6 +1,6 @@
 package me.nayanm.tickets.repositories;
 
-import me.nayanm.tickets.domain.User;
+import me.nayanm.tickets.domain.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

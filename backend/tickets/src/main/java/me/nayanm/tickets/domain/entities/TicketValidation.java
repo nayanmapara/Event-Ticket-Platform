@@ -1,4 +1,4 @@
-package me.nayanm.tickets.domain;
+package me.nayanm.tickets.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.*;

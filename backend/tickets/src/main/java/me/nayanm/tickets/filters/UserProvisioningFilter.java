@@ -5,7 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import me.nayanm.tickets.domain.User;
+import me.nayanm.tickets.domain.entities.User;
 import me.nayanm.tickets.repositories.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class UserProvisioningFilter extends OncePerRequestFilter<> {
+public class UserProvisioningFilter extends OncePerRequestFilter {
 
     private final UserRepository userRepository;
 
