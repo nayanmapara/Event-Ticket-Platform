@@ -9,6 +9,8 @@ import me.nayanm.tickets.exceptions.UserNotFoundException;
 import me.nayanm.tickets.repositories.EventRepository;
 import me.nayanm.tickets.repositories.UserRepository;
 import me.nayanm.tickets.services.EventService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,6 +54,11 @@ public class EventServiceImpl implements EventService {
         eventToCreate.setTicketTypes(ticketTypesToCreate);
 
         return eventRepository.save(eventToCreate);
+    }
+
+    @Override
+    public Page<Event> listEventsForOrganizer(UUID organizerId, Pageable pageable) {
+        return eventRepository.findByOrganizerId(organizerId, pageable);
     }
 
 }
