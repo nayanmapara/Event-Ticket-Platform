@@ -1,6 +1,7 @@
 package me.nayanm.tickets.services;
 
 import me.nayanm.tickets.domain.CreateEventRequest;
+import me.nayanm.tickets.domain.UpdateEventRequest;
 import me.nayanm.tickets.domain.entities.Event;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,4 +13,5 @@ public interface EventService {
     Event createEvent(UUID organizerId, CreateEventRequest event);
     Page<Event> listEventsForOrganizer(UUID organizerId, Pageable pageable);
     Optional<Event> getEventForOrganizer(UUID organizerId, UUID eventId);
+    Event updateEventForOrganizer(UUID organizerId, UUID eventId, UpdateEventRequest event);
 }
