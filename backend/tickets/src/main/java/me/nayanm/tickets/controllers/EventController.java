@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import me.nayanm.tickets.domain.CreateEventRequest;
 import me.nayanm.tickets.domain.dtos.CreateEventRequestDto;
 import me.nayanm.tickets.domain.dtos.CreateEventResponseDto;
+import me.nayanm.tickets.domain.dtos.GetEventDetailsResponseDto;
 import me.nayanm.tickets.domain.dtos.ListEventResponseDto;
 import me.nayanm.tickets.domain.entities.Event;
 import me.nayanm.tickets.mappers.EventMapper;
@@ -50,6 +51,18 @@ public class EventController {
         return ResponseEntity.ok(
                 events.map(eventMapper::toListEventResponseDto)
         );
+    }
+
+    @GetMapping(path = "/{eventId}")
+    public ResponseEntity<GetEventDetailsResponseDto> getEvent(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID eventId
+    ) {
+        UUID userId = parseUserId(jwt);
+        return eventService.getEventForOrganizer(userId, eventId)
+                .map(eventMapper::toGetEventDetailsResponseDto)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     private UUID parseUserId(Jwt jwt) {
