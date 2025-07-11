@@ -1,5 +1,6 @@
 package me.nayanm.tickets.controllers;
 
+import lombok.RequiredArgsConstructor;
 import me.nayanm.tickets.domain.dtos.ListPublishedEventResponseDto;
 import me.nayanm.tickets.mappers.EventMapper;
 import me.nayanm.tickets.services.EventService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/published-events")
+@RequiredArgsConstructor
 public class PublishedEventController {
 
     private final EventService eventService;
