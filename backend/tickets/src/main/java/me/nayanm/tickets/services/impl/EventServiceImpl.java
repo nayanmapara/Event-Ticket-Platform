@@ -6,6 +6,7 @@ import me.nayanm.tickets.domain.CreateEventRequest;
 import me.nayanm.tickets.domain.UpdateEventRequest;
 import me.nayanm.tickets.domain.UpdateTicketTypeRequest;
 import me.nayanm.tickets.domain.entities.Event;
+import me.nayanm.tickets.domain.entities.EventStatusEnum;
 import me.nayanm.tickets.domain.entities.TicketType;
 import me.nayanm.tickets.domain.entities.User;
 import me.nayanm.tickets.exceptions.EventNotFoundException;
@@ -147,6 +148,11 @@ public class EventServiceImpl implements EventService {
     @Transactional
     public void deleteEventForOrganizer(UUID organizerId, UUID eventId) {
         getEventForOrganizer(organizerId, eventId).ifPresent(eventRepository::delete);
+    }
+
+    @Override
+    public Page<Event> listPublishedEvents(Pageable pageable) {
+        return eventRepository.findByStatus(EventStatusEnum.PUBLISHED, pageable);
     }
 
 }
