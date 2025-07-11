@@ -3,10 +3,8 @@ package me.nayanm.tickets.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.nayanm.tickets.domain.CreateEventRequest;
-import me.nayanm.tickets.domain.dtos.CreateEventRequestDto;
-import me.nayanm.tickets.domain.dtos.CreateEventResponseDto;
-import me.nayanm.tickets.domain.dtos.GetEventDetailsResponseDto;
-import me.nayanm.tickets.domain.dtos.ListEventResponseDto;
+import me.nayanm.tickets.domain.UpdateEventRequest;
+import me.nayanm.tickets.domain.dtos.*;
 import me.nayanm.tickets.domain.entities.Event;
 import me.nayanm.tickets.mappers.EventMapper;
 import me.nayanm.tickets.services.EventService;
@@ -39,6 +37,20 @@ public class EventController {
         CreateEventResponseDto createEventResponseDto = eventMapper.toDto(createdEvent);
 
         return new ResponseEntity<>(createEventResponseDto, HttpStatus.CREATED);
+    }
+
+    @PutMapping(path = "/{eventId}")
+    public ResponseEntity<UpdateEventResponseDto> updateEvent(
+            @AuthenticationPrincipal Jwt jwt,
+            @PathVariable UUID eventId,
+            @Valid @RequestBody UpdateEventRequestDto updateEventRequestDto) {
+
+        UpdateEventRequest updateEventRequest = eventMapper.fromDto(updateEventRequestDto);
+        UUID userId = parseUserId(jwt);
+        Event updatedEvent = eventService.updateEventForOrganizer(userId, eventId, updateEventRequest);
+        UpdateEventResponseDto updateEventResponseDto = eventMapper.toUpdateEventResponseDto(updatedEvent);
+
+        return ResponseEntity.ok(updateEventResponseDto);
     }
 
     @GetMapping

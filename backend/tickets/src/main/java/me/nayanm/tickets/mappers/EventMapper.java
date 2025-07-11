@@ -2,6 +2,8 @@ package me.nayanm.tickets.mappers;
 
 import me.nayanm.tickets.domain.CreateEventRequest;
 import me.nayanm.tickets.domain.CreateTicketTypeRequest;
+import me.nayanm.tickets.domain.UpdateEventRequest;
+import me.nayanm.tickets.domain.UpdateTicketTypeRequest;
 import me.nayanm.tickets.domain.dtos.*;
 import me.nayanm.tickets.domain.entities.Event;
 import me.nayanm.tickets.domain.entities.TicketType;
@@ -24,5 +26,13 @@ public interface EventMapper {
     GetEventDetailsTicketTypesResponseDto toGetEventDetailsTicketTypesResponseDto(TicketType ticketType);
 
     GetEventDetailsResponseDto toGetEventDetailsResponseDto(Event event);
+
+    UpdateTicketTypeRequest fromDto(UpdateTicketTypeRequestDto dto);
+
+    UpdateEventRequest fromDto(UpdateEventRequestDto dto);
+
+    UpdateTicketTypeResponseDto toUpdateTicketTypeResponseDto(TicketType ticketType);
+
+    UpdateEventResponseDto toUpdateEventResponseDto(Event event);
 
 }
