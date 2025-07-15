@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+import static me.nayanm.tickets.util.JwtUtil.parseUserId;
+
 @RestController
 @RequestMapping(path = "/api/v1/events")
 @RequiredArgsConstructor
@@ -85,10 +87,6 @@ public class EventController {
         UUID userId = parseUserId(jwt);
         eventService.deleteEventForOrganizer(userId, eventId);
         return ResponseEntity.noContent().build();
-    }
-
-    private UUID parseUserId(Jwt jwt) {
-        return UUID.fromString(jwt.getSubject());
     }
 
 }
