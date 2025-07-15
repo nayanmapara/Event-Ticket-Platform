@@ -18,6 +18,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.UUID;
 
 @Service
@@ -28,7 +29,7 @@ public class QrCodeServiceImpl implements QrCodeService {
     private static final int QR_WIDTH = 300;
 
     private final QRCodeWriter qrCodeWriter;
-    private QrCodeRepository qrCodeRepository;
+    private final QrCodeRepository qrCodeRepository;
 
     @Override
     public QrCode generateQrCode(Ticket ticket) {
@@ -61,7 +62,9 @@ public class QrCodeServiceImpl implements QrCodeService {
 
         try(ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             ImageIO.write(bufferedImage, "png", baos);
-            return baos.toString("UTF-8");
+            byte[] imageBytes = baos.toByteArray();
+
+            return Base64.getEncoder().encodeToString(imageBytes);
         }
     }
 
