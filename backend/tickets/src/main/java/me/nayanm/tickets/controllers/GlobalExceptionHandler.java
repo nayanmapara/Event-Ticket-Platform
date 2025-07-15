@@ -3,10 +3,7 @@ package me.nayanm.tickets.controllers;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import me.nayanm.tickets.domain.dtos.ErrorDto;
-import me.nayanm.tickets.exceptions.EventNotFoundException;
-import me.nayanm.tickets.exceptions.EventUpdateException;
-import me.nayanm.tickets.exceptions.TicketTypeNotFoundException;
-import me.nayanm.tickets.exceptions.UserNotFoundException;
+import me.nayanm.tickets.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -20,6 +17,14 @@ import java.util.List;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(QrCodeGenerationException.class)
+    public ResponseEntity<ErrorDto> handleQrCodeGenerationException(QrCodeGenerationException ex){
+        log.error("Caught QrCodeGenerationException", ex);
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setError("Unable to generate QR code");
+        return new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     @ExceptionHandler(EventUpdateException.class)
     public ResponseEntity<ErrorDto> handleEventUpdateException(EventUpdateException ex){
