@@ -6,10 +6,12 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import me.nayanm.tickets.domain.entities.QrCode;
 import me.nayanm.tickets.domain.entities.QrCodeStatusEnum;
 import me.nayanm.tickets.domain.entities.Ticket;
 import me.nayanm.tickets.exceptions.QrCodeGenerationException;
+import me.nayanm.tickets.exceptions.QrCodeNotFoundException;
 import me.nayanm.tickets.repositories.QrCodeRepository;
 import me.nayanm.tickets.services.QrCodeService;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class QrCodeServiceImpl implements QrCodeService {
 
     private static final int QR_HEIGHT = 300;
@@ -47,6 +50,19 @@ public class QrCodeServiceImpl implements QrCodeService {
 
         } catch (WriterException | IOException ex) {
             throw new QrCodeGenerationException("Failed to generate QR Code", ex);
+        }
+    }
+
+    @Override
+    public byte[] getQrCodeImageForUserAndTicket(UUID userId, UUID ticketId) {
+        QrCode qrCode = qrCodeRepository.findByTicketIdAndTicketPurchaserId(ticketId, userId)
+                .orElseThrow(QrCodeNotFoundException::new);
+
+        try {
+            return Base64.getDecoder().decode(qrCode.getValue());
+        } catch (IllegalArgumentException ex) {
+            log.error("Failed to decode QR Code image for  ticket {}", ticketId, ex);
+            throw new QrCodeNotFoundException();
         }
     }
 
