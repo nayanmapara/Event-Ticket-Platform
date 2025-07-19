@@ -24,6 +24,13 @@ resource "azurerm_postgresql_flexible_server_database" "app" {
   collation = "en_US.utf8"
 }
 
+resource "azurerm_postgresql_flexible_server_database" "keycloak" {
+  name      = "keycloak"
+  server_id = azurerm_postgresql_flexible_server.pg.id
+  charset   = "UTF8"
+  collation = "en_US.utf8"
+}
+
 output "fqdn" {
   value = azurerm_postgresql_flexible_server.pg.fqdn
 }

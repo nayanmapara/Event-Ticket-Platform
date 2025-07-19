@@ -28,8 +28,8 @@ module "keycloak" {
   resource_group_name     = module.resource_group.name
   location                = var.location
   keycloak_admin_password = var.keycloak_admin_password
-  db_fqdn                 = module.database.fqdn
-  db_name                 = module.database.db_name
+  db_fqdn                 = var.db_fqdn
+  db_name                 = var.db_name
   db_username             = var.db_username
   db_password             = var.db_password
 }
