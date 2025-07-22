@@ -13,7 +13,7 @@ import {
   UpdateEventRequest,
 } from "@/domain/domain";
 
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+const API_BASE_URL = "https://tickets-backend.azurewebsites.net";
 
 const getJson = async <T>(response: Response): Promise<T> => {
   const body = await response.json();
