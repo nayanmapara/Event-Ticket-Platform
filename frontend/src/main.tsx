@@ -105,9 +105,9 @@ const router = createBrowserRouter([
 ]);
 
 const oidcConfig = {
-  authority: "http://localhost:9090/realms/event-ticket-platform",
+  authority: "https://keycloak-app-etp.azurewebsites.net/realms/event-ticket-platform",
   client_id: "event-ticket-platform-app",
-  redirect_uri: "http://localhost:5173/callback",
+  redirect_uri: "https://keycloak-app-etp.azurewebsites.net/callback",
 };
 
 createRoot(document.getElementById("root")!).render(
