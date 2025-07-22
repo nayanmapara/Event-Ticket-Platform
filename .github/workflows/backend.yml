@@ -23,7 +23,7 @@ jobs:
           distribution: 'microsoft'
 
       - name: Build with Maven
-        working-directory: backend
+        working-directory: backend/tickets
         run: mvn clean install
 
       - name: Upload backend JAR artifact
