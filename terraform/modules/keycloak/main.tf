@@ -18,27 +18,30 @@ resource "azurerm_linux_web_app" "app" {
 
   app_settings = {
     WEBSITES_ENABLE_APP_SERVICE_STORAGE = "false"
-    DOCKER_CUSTOM_IMAGE_NAME = "nayanmapara/keycloak:azure"
+    WEBSITES_CONTAINER_START_TIME_LIMIT = "1800"
+    DOCKER_CUSTOM_IMAGE_NAME            = "nayanmapara/keycloak:azure"
     WEBSITES_PORT                       = "8080"
 
     KEYCLOAK_ADMIN          = "admin"
     KEYCLOAK_ADMIN_PASSWORD = var.keycloak_admin_password
+    KC_HOSTNAME_ADMIN_URL   = var.kc_hostname_admin_url
+    KC_HOSTNAME_URL         = var.kc_hostname_url
     KC_DB                   = "postgres"
     KC_DB_URL_HOST          = var.db_fqdn
     KC_DB_USERNAME          = var.db_username
     KC_DB_PASSWORD          = var.db_password
     KC_DB_URL_DATABASE      = var.db_name
 
-    KC_DB_PORT              = "5432"
+    KC_DB_PORT = "5432"
 
-    KC_HTTP_ENABLED         = "true"
-    KC_PROXY_HEADERS        = "xforwarded"
+    KC_HTTP_ENABLED          = "true"
+    KC_PROXY_HEADERS         = "xforwarded"
     PROXY_ADDRESS_FORWARDING = "true"
   }
 }
 
 output "url" {
-  value = "https://${azurerm_linux_web_app.app.default_hostname}/"
+  value = "https://${azurerm_linux_web_app.app.default_hostname}"
 }
 
 output "issuer_uri" {

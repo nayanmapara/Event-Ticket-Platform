@@ -70,4 +70,4 @@ keycloak-realm-export.json
 terraform.tfvars
 *.tfstate
 *.tfstate.backup
-
+.terraform/

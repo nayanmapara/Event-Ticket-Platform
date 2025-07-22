@@ -32,6 +32,8 @@ module "keycloak" {
   db_name                 = var.db_name
   db_username             = var.db_username
   db_password             = var.db_password
+  kc_hostname_admin_url   = var.kc_hostname_admin_url
+  kc_hostname_url         = var.kc_hostname_url
 }
 
 module "backend" {

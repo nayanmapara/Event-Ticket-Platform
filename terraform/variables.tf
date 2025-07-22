@@ -48,3 +48,13 @@ variable "db_fqdn" {
   type        = string
   description = "Fully qualified domain name of the PostgreSQL database"
 }
+
+variable "kc_hostname_admin_url" {
+  type        = string
+  description = "Admin URL for Keycloak"
+}
+
+variable "kc_hostname_url" {
+  type        = string
+  description = "Public URL for Keycloak"
+}

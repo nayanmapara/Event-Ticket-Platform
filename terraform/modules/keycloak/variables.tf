@@ -27,3 +27,13 @@ variable "db_password" {
   type      = string
   sensitive = true
 }
+
+variable "kc_hostname_admin_url" {
+  type        = string
+  description = "Admin URL for Keycloak"
+}
+
+variable "kc_hostname_url" {
+  type        = string
+  description = "Public URL for Keycloak"
+}
