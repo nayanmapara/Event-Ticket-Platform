@@ -13,16 +13,8 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      // Proxy /api to json-server
-      // "/api": {
-      //   target: "http://localhost:3000",
-      //   changeOrigin: true,
-      //   rewrite: (path) => path.replace(/^\/api\/v1/, ""),
-      // },
-
-      // Proxy /api to Spring Boot
       "/api": {
-        target: "http://localhost:8080",
+        target: "https://tickets-backend.azurewebsites.net",
         changeOrigin: true,
       },
     },
