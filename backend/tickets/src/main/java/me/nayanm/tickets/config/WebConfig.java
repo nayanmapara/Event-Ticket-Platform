@@ -14,7 +14,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**") // apply to all endpoints
-                        .allowedOrigins("http://localhost:5173", "https://kind-water-098b69f10.2.azurestaticapps.net") // replace with your actual frontend URLs
+                        .allowedOrigins("http://localhost:5173", "https://kind-water-098b69f10.2.azurestaticapps.net")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
