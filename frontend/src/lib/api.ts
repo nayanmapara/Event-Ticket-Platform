@@ -13,7 +13,7 @@ import {
   UpdateEventRequest,
 } from "@/domain/domain";
 
-const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8080";
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 const getJson = async <T>(response: Response): Promise<T> => {
   const body = await response.json();
