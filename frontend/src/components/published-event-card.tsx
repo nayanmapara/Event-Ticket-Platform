@@ -28,14 +28,14 @@ const PublishedEventCard: React.FC<PublishedEventCardProperties> = ({
           </div>
           <div className="flex gap-2 text-sm mb-2 text-gray-500">
             {publishedEvent.start && publishedEvent.end ? (
-              <div className="flex gap-2">
-                <Calendar className="w-5" />{" "}
-                {format(publishedEvent.start, "PP")} -{" "}
-                {format(publishedEvent.end, "PP")}
+              <div className="flex gap-2 items-center">
+                <Calendar className="w-5" />
+                {format(new Date(publishedEvent.start), "PP")} –{" "}
+                {format(new Date(publishedEvent.end), "PP")}
               </div>
             ) : (
-              <div className="flex gap-2">
-                <Calendar />
+              <div className="flex gap-2 items-center">
+                <Calendar className="w-5" />
                 Dates TBD
               </div>
             )}
