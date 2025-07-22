@@ -58,3 +58,13 @@ variable "kc_hostname_url" {
   type        = string
   description = "Public URL for Keycloak"
 }
+
+variable "static_site_name" {
+  type        = string
+  description = "Name of the static site for the frontend"
+}
+
+variable "backend_url" {
+  type        = string
+  description = "URL of the backend API"
+}

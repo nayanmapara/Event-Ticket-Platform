@@ -46,3 +46,11 @@ module "backend" {
   db_password         = var.postgres_password
   jwt_issuer_uri      = module.keycloak.issuer_uri
 }
+
+module "frontend" {
+  source              = "./modules/frontend"
+  resource_group_name = module.resource_group.name
+  location            = var.location
+  static_site_name    = var.static_site_name
+  backend_url         = var.backend_url
+}

@@ -14,14 +14,6 @@ output "resource_group_name" {
   value = module.resource_group.name
 }
 
-# output "fqdn" {
-#   value = module.database.fqdn
-# }
-
-# output "db_name" {
-#   value = module.database.db_name
-# }
-
-# output "db_username" {
-#   value = module.database.db_username
-# }
+output "static_site_url" {
+  value = module.frontend.frontend_url
+}
