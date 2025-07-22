@@ -25,22 +25,19 @@ public class SecurityConfig {
             JwtAuthenticationConverter jwtAuthenticationConverter
     ) throws Exception {
         http
-                .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(authorize ->
-                        authorize
-                                .requestMatchers(HttpMethod.GET, "/api/v1/published-events/**").permitAll()
-                                .requestMatchers("/api/v1/events").hasRole("ORGANIZER")
-                                .requestMatchers("/api/v1/ticket-validations").hasRole("STAFF")
-                                // Catch all rule
-                                .anyRequest().authenticated())
-                .csrf(csrf -> csrf.disable())
-                .sessionManagement(session ->
-                                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .oauth2ResourceServer(oauth2 ->
-                        oauth2.jwt(jwt ->
-                                jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)
-                        ))
-                .addFilterAfter(userProvisioningFilter, BearerTokenAuthenticationFilter.class);
+            .cors(Customizer.withDefaults())  // Enable CORS with our custom configuration
+            .csrf(csrf -> csrf.disable())    // Disable CSRF for APIs (especially stateless ones)
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(authorize -> authorize
+                .requestMatchers(HttpMethod.GET, "/api/v1/published-events/**").permitAll()
+                .requestMatchers("/api/v1/events").hasRole("ORGANIZER")
+                .requestMatchers("/api/v1/ticket-validations").hasRole("STAFF")
+                .anyRequest().authenticated()
+            )
+            .oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter))
+            )
+            .addFilterAfter(userProvisioningFilter, BearerTokenAuthenticationFilter.class);
 
         return http.build();
     }
@@ -54,8 +51,7 @@ public class SecurityConfig {
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", config);
+        source.registerCorsConfiguration("/**", config); // Apply to all routes
         return source;
     }
-
 }
