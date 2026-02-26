@@ -11,7 +11,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // Apply CORS settings to all endpoints
-                        .allowedOrigins("https://kind-water-098b69f10.2.azurestaticapps.net")
+                        .allowedOrigins("https://kind-water-098b69f10.2.azurestaticapps.net", "https://event-ticket-platform-9n7h.onrender.com")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);

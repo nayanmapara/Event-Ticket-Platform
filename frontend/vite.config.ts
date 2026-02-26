@@ -14,7 +14,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://tickets-backend.azurewebsites.net",
+        target: "https://etp-app-latest.onrender.com",
         changeOrigin: true,
       },
     },

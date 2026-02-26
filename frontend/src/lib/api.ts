@@ -13,7 +13,7 @@ import {
   UpdateEventRequest,
 } from "@/domain/domain";
 
-const API_BASE_URL = "https://tickets-backend.azurewebsites.net";
+const API_BASE_URL = "https://etp-app-latest.onrender.com";
 
 const getJson = async <T>(response: Response): Promise<T> => {
   const body = await response.json();

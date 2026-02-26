@@ -45,7 +45,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("https://kind-water-098b69f10.2.azurestaticapps.net"));
+        config.setAllowedOrigins(List.of("https://kind-water-098b69f10.2.azurestaticapps.net", "https://event-ticket-platform-9n7h.onrender.com"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

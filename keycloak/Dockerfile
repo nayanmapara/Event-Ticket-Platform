@@ -1,22 +1,20 @@
-FROM quay.io/keycloak/keycloak:latest
+FROM quay.io/keycloak/keycloak:26.0
 
-# ---- Database Configuration (set these in Render dashboard) ----
+# ---- BUILD TIME OPTIONS ----
 ENV KC_DB=postgres
-ENV KC_DB_URL=${KC_DB_URL}
-ENV KC_DB_USERNAME=${KC_DB_USERNAME}
-ENV KC_DB_PASSWORD=${KC_DB_PASSWORD}
+ENV KC_CACHE=local
 
-# ---- Admin User (set in Render dashboard) ----
-ENV KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
-ENV KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
-
-# ---- Render / Reverse Proxy Settings ----
+# ---- RUNTIME OPTIONS ----
 ENV KC_HTTP_ENABLED=true
 ENV KC_PROXY=edge
+ENV KC_PROXY_HEADERS=xforwarded
+ENV KC_HOSTNAME=keycloak-latest-j99b.onrender.com
 ENV KC_HOSTNAME_STRICT=false
 ENV KC_HOSTNAME_STRICT_HTTPS=false
 
+# Build happens with KC_DB locked in
+RUN /opt/keycloak/bin/kc.sh build
+
 EXPOSE 8080
 
-ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
-CMD ["start", "--http-port=${PORT}"]
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--optimized", "--http-port=8080"]
