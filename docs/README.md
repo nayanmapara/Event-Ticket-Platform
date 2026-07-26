@@ -6,6 +6,7 @@ These documents describe the behavior present in the repository, not a future pr
 | --- | --- | --- |
 | [Project README](../README.md) | Everyone | Capabilities, layout, quick start, and limitations |
 | [Architecture](Architecture/architecture.md) | Developers/architects | Components, request paths, auth, domain flows, and runtime topology |
+| [Diagram gallery](diagrams.md) | Everyone | Consolidated system-context, route, domain-flow, and deployment diagrams |
 | [API endpoints](api-endpoints.md) | Frontend/API developers | Routes, authorization, request/response shapes, errors, and pagination |
 | [Local development](local-development.md) | Contributors | Dependencies, local services, Keycloak setup, commands, and troubleshooting |
 | [Data model](data-model.md) | Backend/data developers | JPA entities, relationships, enums, lifecycle rules, and schema caveats |

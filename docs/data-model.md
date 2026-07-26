@@ -4,6 +4,69 @@ The backend uses JPA entities and UUID primary keys. Spring Data auditing popula
 
 ## Relationships
 
+```mermaid
+erDiagram
+    USER ||--o{ EVENT : organizes
+    USER }o--o{ EVENT : attends
+    USER }o--o{ EVENT : staffs
+    EVENT ||--o{ TICKET_TYPE : offers
+    TICKET_TYPE ||--o{ TICKET : classifies
+    USER ||--o{ TICKET : purchases
+    TICKET ||--o{ QR_CODE : owns
+    TICKET ||--o{ TICKET_VALIDATION : records
+
+    USER {
+        UUID id PK "Keycloak subject"
+        string name
+        string email
+        datetime created_at
+        datetime updated_at
+    }
+
+    EVENT {
+        UUID id PK
+        UUID organizer_id FK
+        string name
+        string venue
+        datetime event_start "optional"
+        datetime event_end "optional"
+        datetime sales_start "optional"
+        datetime sales_end "optional"
+        string status
+    }
+
+    TICKET_TYPE {
+        UUID id PK
+        UUID event_id FK
+        string name
+        double price
+        string description "optional"
+        int total_available "optional"
+    }
+
+    TICKET {
+        UUID id PK
+        UUID ticket_type_id FK
+        UUID purchaser_id FK
+        string status
+    }
+
+    QR_CODE {
+        UUID id PK "Value encoded in image"
+        UUID ticket_id FK
+        string status
+        text value "Base64 PNG"
+    }
+
+    TICKET_VALIDATION {
+        UUID id PK
+        UUID ticket_id FK
+        string status
+        string validation_method
+        datetime created_at
+    }
+```
+
 Most relationship join columns are not explicitly marked `nullable=false`, even when the service layer treats them as required.
 
 ## Entities
@@ -47,6 +110,28 @@ Each validation attempt records a generated UUID, `VALID`/`INVALID`/`EXPIRED` st
 | Validation status | `VALID`, `INVALID`, `EXPIRED` | First/replay rule sets valid/invalid; no expired rule |
 
 ### Implemented state transitions
+
+```mermaid
+stateDiagram-v2
+    state Event {
+        [*] --> DRAFT: organizer creates event
+        DRAFT --> PUBLISHED: organizer update
+        PUBLISHED --> DRAFT: organizer update
+        DRAFT --> CANCELLED: modeled only
+        PUBLISHED --> CANCELLED: modeled only
+        PUBLISHED --> COMPLETED: modeled only
+    }
+
+    state Ticket {
+        [*] --> PURCHASED: purchase succeeds
+        PURCHASED --> CANCELLED: modeled only
+    }
+
+    state QRCode {
+        [*] --> ACTIVE: generated with ticket
+        ACTIVE --> EXPIRED: modeled only
+    }
+```
 
 Solid entry transitions are implemented. Transitions labeled `modeled only` exist in enums but have no service that performs them automatically.
 

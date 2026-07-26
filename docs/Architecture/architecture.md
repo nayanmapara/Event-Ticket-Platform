@@ -4,6 +4,40 @@
 
 The platform is a browser SPA backed by a stateless REST API. Keycloak authenticates users and issues JWTs; Spring Security validates those tokens and PostgreSQL stores application data. QR images are generated inside the API and stored in the database as base64 text.
 
+```mermaid
+flowchart LR
+    User([Attendee / Organizer / Staff])
+
+    subgraph Browser[Browser]
+        SPA[React 19 SPA]
+        OIDC[OIDC client]
+        Roles[Realm-role decoder]
+    end
+
+    subgraph Platform[Application services]
+        API[Spring Boot REST API]
+        Security[Spring Security resource server]
+        Domain[Services and repositories]
+        QR[ZXing QR generator]
+    end
+
+    KC[Keycloak]
+    DB[(PostgreSQL)]
+
+    User --> SPA
+    SPA --> OIDC
+    OIDC <-->|Authorization code flow| KC
+    KC -->|Access token| OIDC
+    OIDC --> Roles
+    SPA -->|HTTPS + Bearer JWT| API
+    API --> Security
+    Security -->|Issuer metadata and signing keys| KC
+    Security --> Domain
+    Domain <-->|JPA / SQL| DB
+    Domain --> QR
+    QR -->|Base64 PNG| Domain
+```
+
 The historical diagram is available at [drawio/architecture.png](drawio/architecture.png); the implementation details below are authoritative.
 
 ## Components
@@ -17,6 +51,23 @@ The historical diagram is available at [drawio/architecture.png](drawio/architec
 | Terraform | Original Azure infrastructure definition | Resource group, PostgreSQL Flexible Server, two Linux Web Apps, Static Web App |
 
 ## Backend layering
+
+```mermaid
+flowchart TB
+    Request[HTTP request] --> Filter[Spring Security filter chain]
+    Filter --> Provision[UserProvisioningFilter]
+    Provision --> Controller[REST controller]
+    Controller --> DTO[DTO validation and MapStruct mapping]
+    DTO --> Service[Transactional service]
+    Service --> Repository[Spring Data repository]
+    Repository --> Database[(PostgreSQL)]
+
+    Error[Domain or validation exception] --> Handler[GlobalExceptionHandler]
+    Controller -.-> Error
+    Service -.-> Error
+    Handler --> Response[HTTP response]
+    Controller --> Response
+```
 
 - Controllers define `/api/v1` resources and response status codes.
 - Services own organizer/purchaser scoping, event reconciliation, inventory locking, QR generation, and validation behavior.
@@ -32,6 +83,29 @@ The JWT `sub` must be a UUID. On the first authenticated request, the provisioni
 Public access is limited to published-event GET routes. Exact matchers require organizer for `/api/v1/events` and staff for `/api/v1/ticket-validations`; all other routes are merely authenticated. Nested organizer routes need stricter matcher coverage.
 
 The frontend's `ProtectedRoute` only checks login. `useRoles` changes navigation/redirect behavior but is not a security boundary.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User
+    participant SPA as React SPA
+    participant KC as Keycloak
+    participant API as Spring Boot API
+    participant DB as PostgreSQL
+
+    User->>SPA: Open protected route
+    SPA->>KC: Authorization request
+    KC->>User: Login and consent
+    KC-->>SPA: Authorization response
+    SPA->>KC: Exchange code for tokens
+    KC-->>SPA: Access token with realm roles
+    SPA->>API: API request with Bearer token
+    API->>KC: Resolve issuer metadata / signing keys
+    API->>API: Validate JWT and convert ROLE_* claims
+    API->>DB: Provision user if JWT subject is new
+    DB-->>API: User record
+    API-->>SPA: Authorized response
+```
 
 ## Core flows
 
@@ -53,6 +127,34 @@ The frontend's `ProtectedRoute` only checks login. `useRoles` changes navigation
 
 The URL's `eventId`, publication state, and sales window are not currently enforced during purchase.
 
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Attendee
+    participant SPA as React SPA
+    participant API as TicketTypeController
+    participant Service as TicketTypeService
+    participant DB as PostgreSQL
+    participant QR as QrCodeService / ZXing
+
+    Attendee->>SPA: Select ticket and confirm mock checkout
+    SPA->>API: POST purchase route + Bearer token
+    API->>Service: purchaseTicket(userId, ticketTypeId)
+    Service->>DB: Find user
+    Service->>DB: Lock ticket type FOR UPDATE
+    Service->>DB: Count purchased tickets
+    alt Inventory available
+        Service->>DB: Save PURCHASED ticket
+        Service->>QR: Generate random QR UUID and PNG
+        QR->>DB: Save ACTIVE QR code
+        Service-->>API: Ticket created
+        API-->>SPA: 204 No Content
+    else Sold out
+        Service-->>API: TicketsSoldOutException
+        API-->>SPA: 400 error response
+    end
+```
+
 ### Admission validation
 
 1. Staff submits either a QR UUID (`QR_SCAN`) or ticket UUID (`MANUAL`).
@@ -61,6 +163,22 @@ The URL's `eventId`, publication state, and sales window are not currently enfor
 4. First use is recorded as `VALID`; later attempts are recorded as `INVALID`.
 
 Event/staff assignment, ticket status, event dates, and QR expiration are not currently checked.
+
+```mermaid
+flowchart TD
+    Start([Staff submits validation]) --> Method{Method is MANUAL?}
+    Method -->|Yes| Ticket[Find ticket by ticket UUID]
+    Method -->|No| Code[Find ACTIVE QR by QR UUID]
+    Code --> TicketFromQR[Resolve QR's ticket]
+    Ticket --> Exists{Ticket found?}
+    TicketFromQR --> Exists
+    Exists -->|No| Error[Return mapped error]
+    Exists -->|Yes| History{Earlier VALID validation?}
+    History -->|No| Valid[Record VALID]
+    History -->|Yes| Invalid[Record INVALID]
+    Valid --> Result[Return ticketId and status]
+    Invalid --> Result
+```
 
 ## Runtime topologies
 

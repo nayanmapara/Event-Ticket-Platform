@@ -37,6 +37,37 @@ The Azure Terraform module references `nayanmapara/keycloak:azure`, not a locall
 
 ## Terraform topology
 
+```mermaid
+flowchart TB
+    User([Browser user])
+
+    subgraph Azure[Azure resource group]
+        SWA[Azure Static Web App<br/>React frontend]
+
+        subgraph Apps[Linux App Services]
+            Backend[Backend Web App<br/>Spring Boot]
+            Keycloak[Keycloak Web App<br/>Custom container]
+        end
+
+        subgraph Data[PostgreSQL Flexible Server 14]
+            Tickets[(tickets database)]
+            Identity[(keycloak database)]
+        end
+    end
+
+    Image[Docker Hub image<br/>nayanmapara/keycloak:azure]
+
+    User -->|HTTPS| SWA
+    SWA -->|Bearer-token API calls| Backend
+    SWA <-->|OIDC redirects and tokens| Keycloak
+    Backend -->|JDBC| Tickets
+    Backend -->|Issuer metadata / JWKS| Keycloak
+    Keycloak -->|JDBC| Identity
+    Image -->|Container pull| Keycloak
+```
+
+The diagram shows the topology declared by Terraform. Current frontend source calls a Render-hosted API directly, so it does not fully follow this path until configuration is aligned.
+
 Terraform >= 1.3 with AzureRM `~> 3.90` declares:
 
 - One resource group
