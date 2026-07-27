@@ -37,7 +37,7 @@ Prerequisites: Java 21, Docker, Node.js/npm, and Maven (or the included Maven wr
    docker compose up -d
    ```
 
-2. Configure Keycloak as described in [`docs/local-development.md`](docs/local-development.md), then start the API:
+2. Configure Keycloak as described in [`docs/guides/local-development.md`](docs/guides/local-development.md), then start the API:
 
    ```bash
    cd backend/tickets
@@ -54,17 +54,19 @@ Prerequisites: Java 21, Docker, Node.js/npm, and Maven (or the included Maven wr
    npm run dev
    ```
 
-The API uses the `dev` Spring profile by default. Important: the frontend currently calls the production Render API directly; see the configuration warning in [`docs/local-development.md`](docs/local-development.md) before testing local end-to-end changes.
+The API uses the `dev` Spring profile by default. Important: the frontend currently calls the production Render API directly; see the configuration warning in [`docs/guides/local-development.md`](docs/guides/local-development.md) before testing local end-to-end changes.
 
 ## Documentation
 
 - [`docs/README.md`](docs/README.md) - documentation index and current-state notes
-- [`docs/Architecture/architecture.md`](docs/Architecture/architecture.md) - components, request flows, authorization, and deployment topology
-- [`docs/api-endpoints.md`](docs/api-endpoints.md) - implemented REST API contract
-- [`docs/local-development.md`](docs/local-development.md) - local setup, Keycloak configuration, commands, and troubleshooting
-- [`docs/data-model.md`](docs/data-model.md) - entities, relationships, states, and lifecycle rules
-- [`docs/deployment.md`](docs/deployment.md) - containers, production variables, Terraform, and known infrastructure gaps
-- [`docs/ERD/erd_evolution.md`](docs/ERD/erd_evolution.md) - historical domain-model evolution
+- [`docs/architecture/README.md`](docs/architecture/README.md) - components, request flows, authorization, and runtime topology
+- [`docs/architecture/diagrams.md`](docs/architecture/diagrams.md) - consolidated Mermaid diagram gallery
+- [`docs/reference/api.md`](docs/reference/api.md) - implemented REST API contract
+- [`docs/reference/data-model.md`](docs/reference/data-model.md) - entities, relationships, states, and lifecycle rules
+- [`docs/guides/local-development.md`](docs/guides/local-development.md) - local setup, Keycloak configuration, commands, and troubleshooting
+- [`docs/guides/testing.md`](docs/guides/testing.md) - test inventory, commands, conventions, warnings, and recommended coverage
+- [`docs/operations/deployment.md`](docs/operations/deployment.md) - containers, production variables, Terraform, and known infrastructure gaps
+- [`docs/history/erd-evolution.md`](docs/history/erd-evolution.md) - historical domain-model evolution
 
 ## Verification
 
@@ -86,7 +88,7 @@ terraform validate
 
 ## Current limitations
 
-- Automated coverage is minimal: the backend only has a context-load test and the frontend has no test suite.
+- Backend coverage currently includes service unit tests for ticket purchase, purchaser scoping, and admission validation plus a Spring context smoke test. Controller, repository integration, concurrency, and frontend tests are still missing.
 - Frontend API and Keycloak URLs are hard-coded in source, despite Terraform exposing a `VITE_BACKEND_URL` setting.
 - CORS origins are hard-coded in two backend configuration classes.
 - The repository does not include a Keycloak realm export, so realm/client/role setup is manual.
