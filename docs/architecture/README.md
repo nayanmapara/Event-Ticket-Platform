@@ -38,7 +38,7 @@ flowchart LR
     QR -->|Base64 PNG| Domain
 ```
 
-The historical diagram is available at [drawio/architecture.png](drawio/architecture.png); the implementation details below are authoritative.
+The historical diagram is available at [assets/architecture.png](assets/architecture.png), with its editable source at [assets/architecture.drawio](assets/architecture.drawio). The implementation details below are authoritative.
 
 ## Components
 

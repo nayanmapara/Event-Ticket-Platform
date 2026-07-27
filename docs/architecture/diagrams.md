@@ -119,8 +119,8 @@ flowchart LR
 
 ## More detailed diagrams
 
-- [Architecture and authentication sequences](Architecture/architecture.md)
-- [Entity relationship and state diagrams](data-model.md)
-- [Azure/Terraform deployment topology](deployment.md)
+- [Architecture and authentication sequences](README.md)
+- [Entity relationship and state diagrams](../data-model.md)
+- [Azure/Terraform deployment topology](../deployment.md)
 
 All diagrams use Mermaid so they remain reviewable in source control and render on GitHub and other Mermaid-enabled Markdown viewers.
