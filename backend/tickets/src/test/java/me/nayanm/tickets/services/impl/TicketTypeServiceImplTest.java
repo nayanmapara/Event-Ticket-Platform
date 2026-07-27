@@ -4,6 +4,9 @@ import me.nayanm.tickets.domain.entities.Ticket;
 import me.nayanm.tickets.domain.entities.TicketStatusEnum;
 import me.nayanm.tickets.domain.entities.TicketType;
 import me.nayanm.tickets.domain.entities.User;
+import me.nayanm.tickets.exceptions.TicketTypeNotFoundException;
+import me.nayanm.tickets.exceptions.TicketsSoldOutException;
+import me.nayanm.tickets.exceptions.UserNotFoundException;
 import me.nayanm.tickets.repositories.TicketRepository;
 import me.nayanm.tickets.repositories.TicketTypeRepository;
 import me.nayanm.tickets.repositories.UserRepository;
@@ -20,7 +23,9 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -77,5 +82,47 @@ class TicketTypeServiceImplTest {
         assertSame(ticketType, result.getTicketType());
         assertSame(result, ticketCaptor.getAllValues().getFirst());
         assertSame(result, ticketCaptor.getAllValues().getLast());
+    }
+
+    @Test
+    void purchaseTicketRejectsPurchaseWhenInventoryIsSoldOut() {
+        UUID userId = UUID.randomUUID();
+        UUID ticketTypeId = UUID.randomUUID();
+        TicketType ticketType = new TicketType();
+        ticketType.setTotalAvailable(3);
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(new User()));
+        when(ticketTypeRepository.findByIdWithLock(ticketTypeId)).thenReturn(Optional.of(ticketType));
+        when(ticketRepository.countByTicketTypeId(ticketTypeId)).thenReturn(3);
+
+        assertThrows(TicketsSoldOutException.class, () -> service.purchaseTicket(userId, ticketTypeId));
+
+        verify(ticketRepository, never()).save(any());
+        verify(qrCodeService, never()).generateQrCode(any());
+    }
+
+    @Test
+    void purchaseTicketRejectsUnknownUserBeforeLookingUpTicketType() {
+        UUID userId = UUID.randomUUID();
+        UUID ticketTypeId = UUID.randomUUID();
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> service.purchaseTicket(userId, ticketTypeId));
+
+        verify(ticketTypeRepository, never()).findByIdWithLock(any());
+        verify(ticketRepository, never()).save(any());
+    }
+
+    @Test
+    void purchaseTicketRejectsUnknownTicketType() {
+        UUID userId = UUID.randomUUID();
+        UUID ticketTypeId = UUID.randomUUID();
+        when(userRepository.findById(userId)).thenReturn(Optional.of(new User()));
+        when(ticketTypeRepository.findByIdWithLock(ticketTypeId)).thenReturn(Optional.empty());
+
+        assertThrows(TicketTypeNotFoundException.class, () -> service.purchaseTicket(userId, ticketTypeId));
+
+        verify(ticketRepository, never()).save(any());
+        verify(qrCodeService, never()).generateQrCode(any());
     }
 }
